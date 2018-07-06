@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Beyond Linux From Scratch' but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Beyond Linux From Scratch is released under the MIT license.
+# Copyright (C) 2001-2017, The BLFS Development Team
+
+# Last update: BLFS r18649 (2017-04-27)
+
+WGETLIST="http://cpan.org/authors/id/G/GR/GRANTM/XML-Simple-2.24.tar.gz"
+MD5SUMLIST="1cd2e8e3421160c42277523d5b2f4dd2"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+perl Makefile.PL &&
+make
+
+make DESTDIR=${FAKEROOT} install
+
+#################
+} # END OF FILE #
+#################
+

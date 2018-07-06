@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="http://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.4.1.tar.gz"
+MD5SUMLIST="e54590ec68d6c1239f67b5b44e92022c"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+PKG_CONFIG_PATH=/tools/lib/pkgconfig ./configure --prefix=/usr
+
+make
+
+make DESTDIR=${FAKEROOT} install
+
+#################
+} # END OF FILE #
+#################
+

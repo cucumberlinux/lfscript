@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="https://github.com/libcheck/check/releases/download/0.11.0/check-0.11.0.tar.gz"
+MD5SUMLIST="9b90522b31f5628c2e0f55dda348e558"
+
+###################################################
+preparation() { # CONSTRUCTING A TEMPORARY SYSTEM #
+###################################################
+
+PKG_CONFIG= ./configure --prefix=/tools
+
+make
+
+make install
+
+#################
+} # END OF FILE #
+#################
+

@@ -1,0 +1,236 @@
+{
+    /**
+     * Dependency modifications.
+     */
+    "dependencies": {
+
+        /**
+         * These are required to build the software when using the instructions
+         * from BLFS. If these are not installed, the software will fail to
+         * build, or the buildscript will produce errors at some stage.
+         */
+        "required": {
+            "avahi":           /* 2017-04-09 */ [ "gtk+2", "gtk+3", "libdaemon" ],
+            "btrfs-progs":     /* 2017-03-16 */ [ "asciidoc", "xmlto" ],
+            "chromium":        /* 2017-03-16 */ [ "pulseaudio", "gtk+3", "flac", "git", "pciutils", "libwebp", "libevent" ],
+            "cmake":           /* 2014-07-18 */ [ "curl", "libarchive" ],
+            "consolekit":      /* 2017-03-11 */ [ "linux-pam" ],
+            "curl":            /* 2017-02-26 */ [ "openssl" ],
+            "docbook-xsl":     /* 2017-02-26 */ [ "libxml2" ],
+            "dconf":           /* 2017-02-26 */ [ "libxslt", "docbook-xsl" ],
+            "ffmpeg":          /* 2014-08-05 */ [ "yasm", "libass", "fdk-aac", "lame", "libtheora", "libvorbis", "libvpx", "x264", "x7lib", "opus", "x265" ],
+            "firefox":         /* 2017-02-26 */ [ "icu", "libevent", "libvpx", "sqlite" ],
+            "garcon":          /* 2014-07-27 */ [ "libxfce4ui" ],
+            "gconf":           /*  RECHECK   */ [ "dbus-glib", "gtk+2" ],
+            "gcr":             /* 2017-02-28 */ [ "gtk+3", "libxslt" ],
+            "gdk-pixbuf":      /* 2017-02-26 */ [ "libtiff" ],
+            "gedit":           /* 2014-08-05 */ [ "enchant", "iso-codes" ],
+            "geoclue2":        /* 2017-04-09 */ [ "modemmanager", "avahi" ],
+            "glib2":           /*  RECHECK   */ [ "pcre" ],
+            "gnome-doc-utils": /*  RECHECK   */ [ "rarian" ],
+            "gnome-keyring":   /* 2017-02-28 */ [ "docbook-xsl" ],
+            "gnutls":          /* 2014-07-27 */ [ "libunistring", "p11-kit" ],
+            "gtksourceview":   /* 2014-08-05 */ [ "libxml2" ],
+            "gucharmap":       /* 2017-03-19 */ [ "vala" ],
+            "gvfs":            /* 2017-03-10 */ [ "gcr", "polkit", "docbook-xsl" ],
+            "harfbuzz":        /* 2014-07-27 */ [ "glib2" ],
+            "libass":          /* 2014-08-05 */ [ "fontconfig" ],
+            "librsvg":         /* 2014-07-29 */ [ "vala" ],
+            "libsecret":       /* 2014-08-05 */ [ "libxslt", "libgcrypt", "docbook-xsl" ],
+            "libvdpau-va-gl":  /* 2014-08-05 */ [ "glib2" ],
+            "libxklavier":     /* 2014-07-29 */ [ "libXdmcp" ],
+            "llvm":            /* 2014-06-27 */ [ "python2", "libffi" ],
+            "llvm3":           /* 2017-04-23 */ [ "python2" ],
+            "lxdm":            /* 2017-03-18 */ [ "linux-pam" ],
+            "mesa":            /* 2014-06-27 */ [ "llvm", "elfutils" ],
+            "modemmanager":    /* 2017-02-27 */ [ "libmbim", "libqmi" ],
+            "networkmanager":  /* 2014-07-06 */ [ "iptables", "newt", "pygobject3", "gtk-doc" ],
+            "network-manager-applet": /* 2017-02-27 */ [ "modemmanager" ],
+            "nodejs":          /* 2017-04-30 */ [ "c-ares" ],
+            "openbox":         /* 2014-08-08 */ [ "libxml2" ],
+            "pango":           /* 2017-02-26 */ [ "cairo" ],
+            "p11-kit":         /* 2017-02-26 */ [ "libtasn1", "libffi" ],
+            "parted":          /* 2014-08-05 */ [ "lvm2" ],
+            "rarian":          /*  RECHECK   */ [ "docbook" ],
+            "sqlite":          /*  RECHECK   */ [ "unzip" ],
+            "talloc":          /*  RECHECK   */ [ "python" ],
+            "upower":          /*  RECHECK   */ [ "libusb" ],
+            "pciutils":        /*  RECHECK   */ [ "wget", "which" ],
+            "qemu":            /* 2017-03-25 */ [ "alsa-lib" ],
+            "usbutils":        /*  RECHECK   */ [ "wget", "which" ],
+            "vlc":             /* 2017-02-26 */ [ "lua", "libmad", "ffmpeg", "liba52", "xorg-server", "alsa-lib", "libgcrypt" ],
+            "vte":             /* 2017-03-05 */ [ "gnutls", "vala" ],
+            "webkitgtk"        /* 2017-03-11 */ [ "geoclue2", "libnotify" ],
+            "wget":            /*  RECHECK   */ [ "openssl" ],
+            "wpa_supplicant":  /*  RECHECK   */ [ "openssl", "dbus", "libnl" ],
+            "x264":            /* 2014-08-05 */ [ "yasm" ],
+            "x7legacy":        /* 2017-02-26 */ [ "x7font" ],
+            "xcb-util-cursor": /* 2017-02-26 */ [ "xcb-util-renderutil", "xcb-util-image" ],
+            "xfce4-settings":  /* 2014-07-27 */ [ "garcon" ],
+            "xorg-server":     /* 2014-09-05 */ [ "libepoxy" ],
+        },
+
+        /**
+         * The dependencies listed here are highly recommended. If they are not
+         * installed, one of the following will be true:
+         *
+         * 1) Some software that depends on a listed package, will fail to
+         *    compile without errors.
+         *
+         * 2) The software requires it at runtime.
+         *
+         * 3) Without it, the software does not work properly or lacks
+         *    significant functionality.
+         */
+        "recommended": {
+               "atk":            { /*  RECHECK   */ "gobject-introspection": "it avoids compilation order problems when building Gnome"
+            }, "cairo":          { /* 2014-07-27 */ "xorg":                  "it is required to build GTK+2"
+            }, "consolekit":     { /*  RECHECK   */ "polkit":                "it avoids security problems"
+            }, "curl":           { /* 2017-04-23 */ "cacerts":               "it is a runtime dependency for HTTPS"
+            }, "cups":           { /* 2017-03-16 */ "xdg-utils":             "it avoids having to explicitly set a browser as the default HTML viewer"
+            }, "gdk-pixbuf":     { /*  RECHECK   */ "gobject-introspection": "it avoids compilation order problems when building Gnome",
+                                   /*  RECHECK   */ "xorg":                  "many GTK+ applications require gdk-pixbuf-xlib"
+            }, "gnutls":         { /*  RECHECK   */ "libtasn1":              "it will otherwise install it's own outdated version"
+            }, "harfbuzz":       { /* 2014-07-27 */ "freetype2":             "it is required to build Pango",
+                                   /* 2017-03-10 */ "icu":                   "it is required to build WebkitGTK"
+            }, "libcanberra":    { /* 2017-02-26 */ "gtk+3":                 "it enables libcanberra-gtk, which is required by 'Marco'"
+            }, "libdrm":         { /* 2014-06-22 */ "x7lib":                 "it enables Intel KMS API support required by Mesa (and Mesa requires x7lib anyway)"
+            }, "libgnome":       { /*  RECHECK   */ "esound":                "it is recommended for Gnome"
+            }, "libsoup":        { /* 2017-03-10 */ "gobject-introspection": "it is required to build WebkitGTK",
+                                   /* 2017-03-10 */ "vala":                  "it is required when building with gobject-introspection"
+            }, "libxfce4ui":     { /* 2017-02-27 */ "gtk+3":                 "it is required to build garcon"
+            }, "libxklavier":    { /* 2017-02-26 */ "gobject-introspection": "*.gir files for libxklavier are required by libmatekbd"
+            }, "libxml2":        { /* 2014-06-22 */ "python2":               "it is required to build Mesa (and therefore Xorg)"
+            }, "networkmanager": { /* 2014-07-06 */ "dhcpcd":                "it is required for DHCP functionality",
+                                   /* 2014-08-05 */ "gobject-introspection": "it is required to build network-manager-applet"
+            }, "pango":          { /*  RECHECK   */ "gobject-introspection": "it avoids compilation order problems when building Gnome"
+            }, "polkit":         { /* 2014-07-29 */ "gobject-introspection": "it is required to build Gnome/MATE"
+            }, "poppler":        { /* 2017-03-05 */ "cairo":                 "it is required to build Atril"
+            }, "pulseaudio":     { /* 2017-03-16 */ "alsa-lib":              "it is required to play sound through ALSA"
+            }, "python2":        { /* 2017-02-26 */ "openssl":               "it is required to build Firefox"
+            },
+        },
+
+        /**
+         * The dependencies listed here are not required but are listed in BLFS
+         * anyway.
+         */
+        "blacklisted": {
+            "gucharmap":              /* 2017-03-19 */ [ "appstream-glib" ],
+            "libjpeg-turbo":          /*  RECHECK   */ [ "yasm" ],
+            "libnotify":              /*  RECHECK   */ [ "notification-daemon", "xfce4-notifyd" ],
+            "libvdpau":               /*  RECHECK   */ [ "ffmpeg", "glu", "libva" ],
+            "libvpx":                 /*  RECHECK   */ [ "nasm" ],
+            "network-manager-applet": /*  RECHECK   */ [ "lxpolkit", "polkit-gnome" ],
+            "networkmanager":         /*  RECHECK   */ [ "gnutls" ],
+            "xcb-proto":              /*  RECHECK   */ [ "python3" ],
+            "xdg-utils":              /* 2017-03-16 */ [ "lynx", "w3m" ], /* Only one of "links", "lynx" or "w3m" is required */
+            "xorg-server":            /*  RECHECK   */ [ "libgcrypt", "nettle" ],
+        },
+    },
+
+    /**
+     * Instructions that have the listed phrases in them will be commented out
+     * of their respective scripts.
+     * Commands are commented out for one of the following reasons:
+     *
+     * 1) They only run supplemental tests; Some test-suites will always exit
+     *    with errors which LFScript will interpret as compilation failures.
+     *    To avoid these issues, don't run test suites.
+     *
+     * 2) They build supplemental documentation which requires the presence of
+     *    additional software. In stead of adding Doxygen and Tex as a
+     *    dependency to every script that can build extra documentation (which
+     *    makes the building of a system unneccessarily complex and bloated) we
+     *    simply don't build the extra documentation and save space.
+     *    Documentation is available on the internet anyway...
+     *
+     * 3) It contains only a configuration example, sometimes with placeholders.
+     *
+     * 4) It requires software that is not a direct dependency to be installed,
+     *    and the commands are not required to build a properly working copy of
+     *    the software.
+     *
+     * 5) It is superfluous. For example 'ldconfig' is executed by LFScript
+     *    after the installation of each package, regardless of it's presence
+     *    in a script.
+     */
+    "blacklistedCommands": {
+           "*":              { "make check":               "Don't run test suites.",
+                               "<loginname>":              "Example configuration",
+                               "<theme>":                  "Example configuration",
+                               "<username>":               "Example configuration",
+                               "<LFS.ORG>":                "Example configuration"
+        }, "alsa-lib":       { "make doc":                 "Suppress the building of documentation which requires additional software to be installed",
+                               "/usr/share/doc":           "Suppress the building of documentation which requires additional software to be installed"
+        }, "alsa-utils":     { "alsactl":                  "Example configuration"
+        }, "btrfs-progs":    { "tests":                    "Don't run test suites",
+        }, "cpio":           { "pdf":                      "Don't build documentation",
+        }, "cups":           { "CUPS_HTMLVIEW":            "Not required if installing xdg-utils",
+                               "gtk-update-icon-cache"     "Will be executed by GTK+"
+        }, "curl":           { "ld-linux":                 "Don't run test suites",
+        }, "dbus":           { "enable-tests":             "Don't run test suites",
+                               "name-test":                "Don't run test suites",
+                               "groupadd":                 "User and group were already created in LFS",
+                               "# Start":                  "Example configuration"
+                               "# Kill":                   "Example configuration"
+        }, "dhcpcd":         { "eth0":                     "Example configuration"
+        }, "docbook-xsl":    { "xsl/<version>":            "Example configuration"
+        }, "enchant":        { "enchant":                  "Do not use aspell"
+        }, "ffmpeg":         { "html":                     "Suppress the building of documentation which requires additional software to be installed",
+                               "fate":                     "Don't run test suites",
+                               "*.pdf":                    "Suppress the installation of documentation which requires additional software to be installed"
+        }, "fluxbox":        { "fluxbox-generate_menu":    "Example configuration"
+        }, "git":            { "make html":                "Don't build documentation",
+                               "make man":                 "Don't build documentation",
+                               "install-man":              "Don't build documentation",
+                               "install-html":             "Don't build documentation"
+        }, "graphite2":      { "doc":                      "Don't build documentation"
+        }, "gtk+2":          { "gtkrc":                    "Example configuration"
+        }, "gtk+3":          { "~/.config":                "Example configuration"
+        }, "mitkrb":         { "krb5kdc":                  "Example configuration",
+                               "ktutil":                   "Example configuration",
+                               "klist":                    "Example configuration",
+                               "kadmin":                   "Example configuration",
+                               "EXAMPLE.ORG":              "Example configuration"
+                               "make install-":            "Do not install bootscript, because we have not set up a proper configuration"
+        }, "libdaemon":      { "doxygen":                  "Suppress the building of documentation which requires additional software to be installed",
+                               "reference":                "Suppress the building of documentation which requires additional software to be installed",
+        }, "libevent":       { "doxygen":                  "Suppress the building of documentation which requires additional software to be installed"
+        }, "libinput":       { "ld-linux":                 "Only required for test suite"
+        }, "libgcrypt":      { "html":                     "Suppress the building of documentation which requires additional software to be installed"
+        }, "libisoburn":     { "doxygen":                  "Suppress the building of documentation which requires additional software to be installed",
+                               "/usr/share/doc":           "Suppress the building of documentation which requires additional software to be installed"
+        }, "libusb":         { "make -C doc":              "Suppress the building of documentation which requires additional software to be installed",
+                               "apidocs":                  "Suppress the building of documentation which requires additional software to be installed"
+        }, "llvm":           { " docs": /* with space */   "Suppress the building of documentation which requires additional software to be installed", 
+                               "clang-html":               "Suppress the building of documentation which requires additional software to be installed", 
+        }, "lvm2":           { "with-thin":                "Example configuration",
+        }, "lxdm":           { "init":                     "Example configuration",
+        }, "networkmanager"  { "usermod":                  "Example configuration",
+        }, "ninja"           { "emacs":                    "Don't assume emacs is installed",
+                               "manual":                   "Suppress the building of documentation",
+                               "doxygen":                  "Suppress the building of documentation",
+        }, "ntfs-3g"         { "/mnt/usb":                 "Example configuration",
+        }, "openbox":        { "exec openbox":             "Example configuration",
+                               "ls -d ":                   "Configuration information"
+        }, "openssh":        { "pam.d":                    "Example configuration",
+                               "sshd_config":              "Example configuration",
+                               "~/.ssh":                   "Example configuration",
+        }, "pango":          { "ModulesPath":              "Configuration information"
+        }, "parted":         { "dvi":                      "Suppress the building of documentation which requires additional software to be installed"
+        }, "polkit":         { "pam.d":                    "Not required because PAM is not installed"
+        }, "popt":           { "doxygen":                  "Suppress the building of documentation which requires additional software to be installed"
+        }, "pulseaudio":     { "system.d":                 "Don't remove non-existant file",
+        }, "rsync":          { "dox":                      "Suppress the building of documentation which requires additional software to be installed"
+        }, "sgml-common":    { "remove":                   "Only to be run if upgrading"
+        }, "transmission":   { "qt":                       "Do not build QT GUI"
+        }, "wpa_supplicant": { "/etc/sysconfig/ifconfig.": "Example configuration",
+                               "wpa_gui-qt4":              "Not required because QT4 is not installed",
+                               "wifi0":                    "Example configuration",
+                               "update-desktop-database":  "Will be executed by desktop-file-utils, if it is installed"
+        }, "x7lib":          { "summary":                  "Only run this after tests"
+        },
+    },
+}
+

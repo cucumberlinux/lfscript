@@ -1,0 +1,13 @@
+diff -rupN old/BOOK/gnome/platform/yelp.xml new/BOOK/gnome/platform/yelp.xml
+--- old/BOOK/gnome/platform/yelp.xml	2017-02-21 00:27:17.000000000 +0100
++++ new/BOOK/gnome/platform/yelp.xml	2017-03-11 16:48:55.056347535 +0100
+@@ -123,8 +123,7 @@ make</userinput></screen>
+       Now, as the <systemitem class="username">root</systemitem> user:
+     </para>
+ 
+-<screen role="root"><userinput>make install &amp;&amp;
+-update-desktop-database</userinput></screen>
++<screen role="root"><userinput>make install</userinput></screen>
+ 
+   </sect2>
+ 

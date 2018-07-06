@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="http://dev.gentoo.org/~blueness/eudev/eudev-3.2.2.tar.gz
+          http://anduin.linuxfromscratch.org/LFS/udev-lfs-20140408.tar.bz2"
+MD5SUMLIST="41e19b70462692fefd072a3f38818b6e
+            c2d6b127f89261513b23b6d458484099"
+POSTINST="now"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+sed -r -i 's|/usr(/bin/test)|\1|' test/udev-test.pl
+
+sed -i '/keyboard_lookup_key/d' src/udev/udev-builtin-keyboard.c
+
+cat > config.cache << "EOF"
+HAVE_BLKID=1
+BLKID_LIBS="-lblkid"
+BLKID_CFLAGS="-I/tools/include"
+EOF
+
+./configure --prefix=/usr           \
+            --bindir=/sbin          \
+            --sbindir=/sbin         \
+            --libdir=/usr/lib       \
+            --sysconfdir=/etc       \
+            --libexecdir=/lib       \
+            --with-rootprefix=      \
+            --with-rootlibdir=/lib  \
+            --enable-manpages       \
+            --disable-static        \
+            --config-cache
+
+LIBRARY_PATH=/tools/lib make
+
+make DESTDIR=${FAKEROOT} LD_LIBRARY_PATH=/tools/lib install
+
+tar -xvf ../udev-lfs-20140408.tar.bz2
+make DESTDIR=${FAKEROOT} -f udev-lfs-20140408/Makefile.lfs install
+
+###################################################
+}; postinst() { # POST-INSTALLATION CONFIGURATION #
+###################################################
+
+LD_LIBRARY_PATH=/tools/lib udevadm hwdb --update
+
+#################
+} # END OF FILE #
+#################
+

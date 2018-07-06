@@ -1,0 +1,71 @@
+#!/bin/bash
+
+WGETLIST="http://anduin.linuxfromscratch.org/BLFS/OpenJDK/OpenJDK-1.8.0.121/OpenJDK-1.8.0.121-i686-bin.tar.xz
+          http://anduin.linuxfromscratch.org/BLFS/OpenJDK/OpenJDK-1.8.0.121/OpenJDK-1.8.0.121-x86_64-bin.tar.xz"
+MD5SUMLIST="69a1c15a7381fd8de4a7d019971c078e
+            1aec751c6f406cbf1f48fc98ab7ead1c"
+REQUIRES="postlfs"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+mkdir openjdk_builddir
+cd openjdk_builddir
+case $(uname -m) in
+    x86_64) tar -xf ../../OpenJDK-*-x86_64-bin.tar.xz
+    ;;
+    i?86) tar -xf ../../OpenJDK-*-i686-bin.tar.xz
+    ;;
+esac
+cd *
+
+# Installation of the Java BinaryJDK
+install -vdm755 ${FAKEROOT}/opt/OpenJDK-1.8.0.121-bin
+mv -v * ${FAKEROOT}/opt/OpenJDK-1.8.0.121-bin
+chown -R root:root ${FAKEROOT}/opt/OpenJDK-1.8.0.121-bin
+
+ln -sfn OpenJDK-1.8.0.121-bin ${FAKEROOT}/opt/jdk
+
+# (*) Create a folder which is expected by the profile script
+mkdir -p ${FAKEROOT}/usr/share/java
+
+# Configuring the JAVA environment
+cat > ${FAKEROOT}/etc/profile.d/openjdk.sh << "EOF"
+# Begin /etc/profile.d/openjdk.sh
+
+# Set JAVA_HOME directory
+JAVA_HOME=/opt/jdk
+
+# Adjust PATH
+pathappend $JAVA_HOME/bin
+
+# Add to MANPATH
+pathappend $JAVA_HOME/man MANPATH
+
+# Auto Java CLASSPATH: Copy jar files to, or create symlinks in, the
+# /usr/share/java directory. Note that having gcj jars with OpenJDK 8
+# may lead to errors.
+
+AUTO_CLASSPATH_DIR=/usr/share/java
+
+pathprepend . CLASSPATH
+
+for dir in `find ${AUTO_CLASSPATH_DIR} -type d 2>/dev/null`; do
+    pathappend $dir CLASSPATH
+done
+
+for jar in `find ${AUTO_CLASSPATH_DIR} -name "*.jar" 2>/dev/null`; do
+    pathappend $jar CLASSPATH
+done
+
+export JAVA_HOME
+unset AUTO_CLASSPATH_DIR dir jar
+
+# End /etc/profile.d/openjdk.sh
+EOF
+
+#################
+} # END OF FILE #
+#################
+

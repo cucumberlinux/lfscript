@@ -1,0 +1,24 @@
+diff -rupN old/BOOK/gnome/platform/dconf.xml new/BOOK/gnome/platform/dconf.xml
+--- old/BOOK/gnome/platform/dconf.xml	2017-02-20 01:31:30.000000000 +0100
++++ new/BOOK/gnome/platform/dconf.xml	2017-02-26 23:10:57.389594275 +0100
+@@ -171,20 +171,6 @@ make</userinput></screen>
+ 
+ <screen role="root"><userinput>make install</userinput></screen>
+ 
+-    <para>Now, optionally install the editor:</para>
+-
+-<screen><userinput>tar -xf ../dconf-editor-&dconf-editor-version;.tar.xz &amp;&amp;
+-cd dconf-editor-&dconf-editor-version; &amp;&amp;
+-
+-./configure --prefix=/usr --sysconfdir=/etc &amp;&amp;
+-make</userinput></screen>
+-
+-    <para>
+-      As the <systemitem class="username">root</systemitem> user:
+-    </para>
+-
+-<screen role="root"><userinput>make install</userinput></screen>
+-
+   </sect2>
+ 
+   <sect2 role="commands">

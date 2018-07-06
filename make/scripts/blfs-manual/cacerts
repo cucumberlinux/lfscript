@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Beyond Linux From Scratch' but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Beyond Linux From Scratch is released under the MIT license.
+# Copyright (C) 2001-2017, The BLFS Development Team
+
+# Last update: BLFS r18649 (2017-04-27)
+
+WGETLIST="http://anduin.linuxfromscratch.org/BLFS/other/make-ca.sh-20170425"
+MD5SUMLIST="b42fd97c173ef67a37fb05ed7587e0a8"
+REQUIRES="openssl wget"
+POSTINST="now"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+install -vm755 make-ca.sh-20170425 ${FAKEROOT}/usr/sbin/make-ca.sh
+
+###################################################
+}; postinst() { # POST-INSTALLATION CONFIGURATION #
+###################################################
+
+wget http://anduin.linuxfromscratch.org/BLFS/other/certdata.txt
+/usr/sbin/make-ca.sh
+rm -rvf certdata.txt
+
+#################
+} # END OF FILE #
+#################
+

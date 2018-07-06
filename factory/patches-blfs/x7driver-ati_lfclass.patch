@@ -1,0 +1,18 @@
+diff -rupN old/BOOK/x/installing/x7driver-ati.xml new/BOOK/x/installing/x7driver-ati.xml
+--- old/BOOK/x/installing/x7driver-ati.xml	2017-03-21 21:49:12.000000000 +0100
++++ new/BOOK/x/installing/x7driver-ati.xml	2017-04-02 15:49:27.296286064 +0200
+@@ -194,11 +194,9 @@ make</userinput></screen>
+         Now, as the <systemitem class="username">root</systemitem> user:
+       </para>
+ 
+-<screen role="root"><userinput>
+-make install                         &amp;&amp;
+-install -v -m644 conf/10-radeon.conf \
+-  $XORG_PREFIX/share/X11/xorg.conf.d
+-</userinput></screen>
++<screen role="root"><userinput>make install</userinput></screen>
++<screen role="root"><userinput>install -v -m644 conf/10-radeon.conf \
++  $XORG_PREFIX/share/X11/xorg.conf.d</userinput></screen>
+     </sect3>
+ 
+ <!--

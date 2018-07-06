@@ -1,0 +1,151 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="http://ftp.gnu.org/gnu/glibc/glibc-2.27.tar.xz
+          http://www.iana.org/time-zones/repository/releases/tzdata2017b.tar.gz
+          http://www.linuxfromscratch.org/patches/lfs/8.1/glibc-2.26-fhs-1.patch"
+MD5SUMLIST="898cd5656519ffbc3a03fe811dd89e82
+            50dc0dc50c68644c1f70804f2e7a1625
+            9a5997c3452909b1769918c759eff8a2"
+POSTINST="now"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+patch -Np1 -i ../glibc-2.26-fhs-1.patch
+
+ln -sfv /tools/lib/gcc /usr/lib
+
+case $(uname -m) in
+    i?86)    GCC_INCDIR=/usr/lib/gcc/$(uname -m)-pc-linux-gnu/7.3.0/include
+            ln -sfv ld-linux.so.2 /lib/ld-lsb.so.3
+    ;;
+    x86_64) GCC_INCDIR=/usr/lib/gcc/x86_64-pc-linux-gnu/7.3.0/include
+            ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64
+            ln -sfv ../lib/ld-linux-x86-64.so.2 /lib64/ld-lsb-x86-64.so.3
+    ;;
+esac
+
+rm -f /usr/include/limits.h
+
+mkdir -v build
+cd       build
+
+CC="gcc -isystem $GCC_INCDIR -isystem /usr/include" \
+../configure --prefix=/usr                   \
+             --enable-kernel=3.10            \
+             --disable-werror                \
+             --enable-obsolete-rpc           \
+             --enable-stack-protector=strong \
+             libc_cv_slibdir=/lib
+unset GCC_INCDIR
+
+
+make
+
+touch ${FAKEROOT}/etc/ld.so.conf
+
+
+
+make install_root=${FAKEROOT} install
+
+cp -v ../nscd/nscd.conf ${FAKEROOT}/etc/nscd.conf
+mkdir -pv ${FAKEROOT}/var/cache/nscd
+
+make install_root=${FAKEROOT} localedata/install-locales
+
+cat > ${FAKEROOT}/etc/nsswitch.conf << "EOF"
+# Begin /etc/nsswitch.conf
+
+passwd: files
+group: files
+shadow: files
+
+hosts: files dns
+networks: files
+
+protocols: files
+services: files
+ethers: files
+rpc: files
+
+# End /etc/nsswitch.conf
+EOF
+
+tar -xf ../../tzdata2017b.tar.gz
+
+ZONEINFO=${FAKEROOT}/usr/share/zoneinfo
+mkdir -pv $ZONEINFO/{posix,right}
+
+for tz in etcetera southamerica northamerica europe africa antarctica  \
+          asia australasia backward pacificnew systemv; do
+    /tools/sbin/zic -L /dev/null   -d $ZONEINFO       -y "sh yearistype.sh" ${tz}
+    /tools/sbin/zic -L /dev/null   -d $ZONEINFO/posix -y "sh yearistype.sh" ${tz}
+    /tools/sbin/zic -L leapseconds -d $ZONEINFO/right -y "sh yearistype.sh" ${tz}
+done
+
+cp -v zone.tab zone1970.tab iso3166.tab $ZONEINFO
+/tools/sbin/zic -d $ZONEINFO -p America/New_York
+unset ZONEINFO
+
+cat > ${FAKEROOT}/etc/ld.so.conf << "EOF"
+# Begin /etc/ld.so.conf
+/usr/local/lib
+/opt/lib
+
+EOF
+
+cat >> ${FAKEROOT}/etc/ld.so.conf << "EOF"
+# Add an include directory
+include /etc/ld.so.conf.d/*.conf
+
+EOF
+mkdir -pv ${FAKEROOT}/etc/ld.so.conf.d
+
+###################################################
+}; postinst() { # POST-INSTALLATION CONFIGURATION #
+###################################################
+
+# (*) This will run 'tzselect' to determine your timezone when installing your
+#     system, unless you have set up the TZ variable in 'install.conf'.
+if [ "${LFSCRIPT_INSTALL}" == "true" ]; then
+    [ "${TZ}" == "" ] && TZ="$(tzselect)"
+else
+    TZ="UTC"
+fi
+#tzselect
+
+# (*) This will set the time zone to the one selected earlier.
+cp -v /usr/share/zoneinfo/${TZ} /etc/localtime
+
+######################################################
+}; preparation() { # CONSTRUCTING A TEMPORARY SYSTEM #
+######################################################
+
+mkdir -v build
+cd       build
+
+../configure                             \
+      --prefix=/tools                    \
+      --host=$LFS_TGT                    \
+      --build=$(../scripts/config.guess) \
+      --enable-kernel=3.10               \
+      --with-headers=/tools/include      \
+      libc_cv_forced_unwind=yes          \
+      libc_cv_c_cleanup=yes
+
+make
+
+make install
+
+#################
+} # END OF FILE #
+#################
+

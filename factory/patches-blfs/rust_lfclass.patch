@@ -1,0 +1,17 @@
+diff -rupN old/BOOK/general/prog/rust.xml new/BOOK/general/prog/rust.xml
+--- old/BOOK/general/prog/rust.xml	2017-04-24 23:08:42.000000000 +0200
++++ new/BOOK/general/prog/rust.xml	2017-04-28 20:29:03.103474593 +0200
+@@ -152,10 +152,10 @@
+       Now, as the <systemitem class="username">root</systemitem> user:
+     </para>
+ 
+-<screen role="root"><userinput>test -f /usr/lib/libLLVM-3.9.so ||
+-  ln -sv /opt/llvm3/lib/libLLVM-3.9.so /usr/lib &amp;&amp;
++<screen><userinput>test -f /usr/lib/libLLVM-3.9.so ||
++  ln -sv /opt/llvm3/lib/libLLVM-3.9.so /usr/lib</userinput></screen>
+ 
+-./x.py dist --install</userinput></screen>
++<screen role="root"><userinput>./x.py dist --install</userinput></screen>
+   </sect2>
+ 
+   <sect2 role="commands">

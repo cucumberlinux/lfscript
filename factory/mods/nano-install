@@ -1,0 +1,2 @@
+# (*) Configure and use sample configuration
+install -v -m644 doc/sample.nanorc /etc/nanorc

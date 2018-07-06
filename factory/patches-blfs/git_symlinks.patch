@@ -1,0 +1,21 @@
+diff -rupN old/BOOK/general/prog/git.xml new/BOOK/general/prog/git.xml
+--- old/BOOK/general/prog/git.xml	2017-03-21 18:52:50.000000000 +0100
++++ new/BOOK/general/prog/git.xml	2017-04-02 15:58:01.831932408 +0200
+@@ -147,7 +147,7 @@
+     </para>
+ 
+ <screen><userinput>./configure --prefix=/usr --with-gitconfig=/etc/gitconfig &amp;&amp;
+-make</userinput></screen>
++make NO_INSTALL_HARDLINKS=YesPlease</userinput></screen>
+ 
+     <para>
+       You can build the man pages and/or html docs, or
+@@ -180,7 +180,7 @@ make</userinput></screen>
+       user:
+     </para>
+ 
+-<screen role="root"><userinput>make install</userinput></screen>
++<screen role="root"><userinput>make NO_INSTALL_HARDLINKS=YesPlease install</userinput></screen>
+ 
+ <!-- ==== Method 1 for docs ====== -->
+     <bridgehead renderas="sect3">If you created the man pages and/or html docs</bridgehead>

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="http://ftp.gnu.org/gnu/bash/bash-4.4.18.tar.gz"
+MD5SUMLIST="518e2c187cc11a17040f0915dddce54e"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+#patch -Np1 -i ../bash-4.4-upstream_fixes-1.patch
+
+./configure --prefix=/usr                       \
+            --docdir=/usr/share/doc/bash-4.4.18 \
+            --without-bash-malloc               \
+            --with-installed-readline
+
+make
+
+make DESTDIR=${FAKEROOT} install
+mv -vf ${FAKEROOT}/usr/bin/bash ${FAKEROOT}/bin
+
+# (*) This will add the '/bin/sh' symlink to the package archive.
+ln -s bash ${FAKEROOT}/bin/sh
+
+######################################################
+}; preparation() { # CONSTRUCTING A TEMPORARY SYSTEM #
+######################################################
+
+./configure --prefix=/tools --without-bash-malloc
+
+make
+
+make install
+
+ln -sv bash /tools/bin/sh
+
+#################
+} # END OF FILE #
+#################
+

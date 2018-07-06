@@ -1,0 +1,17 @@
+# (*) Custom profile script; Install it in post-installation so that
+#     'dbus-launch' is not executed in the chroot environment when reloading
+#     the system profile.
+cat > /etc/profile.d/dbus.sh << "EOF"
+# (*) Start the D-Bus session daemon, unless one is already running
+if [ -r ~/.dbus_session ]; then
+    . ~/.dbus_session
+fi
+
+if [ ! -n "${DBUS_SESSION_BUS_PID}" ] ||
+   [ ! kill -0 "${DBUS_SESSION_BUS_PID}" 2> /dev/null ]; then
+    dbus-launch > ~/.dbus_session
+    . ~/.dbus_session
+fi
+
+export DBUS_SESSION_BUS_ADDRESS
+EOF

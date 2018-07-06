@@ -1,0 +1,17 @@
+diff -rupN old/BOOK/pst/printing/cups.xml new/BOOK/pst/printing/cups.xml
+--- old/BOOK/pst/printing/cups.xml	2017-04-07 17:53:32.000000000 +0200
++++ new/BOOK/pst/printing/cups.xml	2017-04-15 20:56:48.749618295 +0200
+@@ -234,6 +234,13 @@ sed -i '/LIBGCRYPTCONFIG/d' config-scrip
+ aclocal  -I config-scripts &amp;&amp;
+ autoconf -I config-scripts &amp;&amp;
+ 
++# (*) Fix compilation issue on i486
++CUPS_CXXFLAGS="${CXXFLAGS}"
++case $(uname -m) in
++    i?86) CUPS_CXXFLAGS="${CUPS_CXXFLAGS} -march=i486" ;;
++esac
++
++CXXFLAGS="${CUPS_CXXFLAGS}" \
+ CC=gcc \
+ ./configure --libdir=/usr/lib            \
+             --disable-systemd            \

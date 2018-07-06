@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Beyond Linux From Scratch' but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Beyond Linux From Scratch is released under the MIT license.
+# Copyright (C) 2001-2017, The BLFS Development Team
+
+# Last update: BLFS r18649 (2017-04-27)
+
+WGETLIST="https://downloads.sourceforge.net/project/dejavu/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2"
+MD5SUMLIST="d0efec10b9f110a32e9b8f796e21782c"
+REQUIRES="fontconfig"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+install -v -d -m755 ${FAKEROOT}/usr/share/fonts/dejavu &&
+install -v -m644 ttf/*.ttf ${FAKEROOT}/usr/share/fonts/dejavu
+
+###################################################
+}; postinst() { # POST-INSTALLATION CONFIGURATION #
+###################################################
+
+fc-cache -v /usr/share/fonts/dejavu
+
+#################
+} # END OF FILE #
+#################
+

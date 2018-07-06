@@ -1,0 +1,18 @@
+diff -rupN old/BOOK/x/installing/mesa.xml new/BOOK/x/installing/mesa.xml
+--- old/BOOK/x/installing/mesa.xml	2017-02-26 19:30:49.000000000 +0100
++++ new/BOOK/x/installing/mesa.xml	2017-04-02 15:52:29.292151425 +0200
+@@ -153,6 +153,14 @@
+       command:
+     </para>
+ 
++<screen><userinput># (*) Fix for i486 (https://bugs.freedesktop.org/show_bug.cgi?id=93089#c10)
++if [ "$(uname -m)" != "x86_64" ]; then
++    sed 's@uint64_t intel_debug @//uint64_t intel_debug @g' \
++        -i src/mesa/drivers/dri/i965/intel_debug.c
++    sed 's@(void) p_atomic_cmpxchg@//(void) p_atomic_cmpxchg@g' \
++        -i src/mesa/drivers/dri/i965/intel_debug.c
++fi</userinput></screen>
++
+ <screen><userinput>patch -Np1 -i ../mesa-&mesa-version;-add_xdemos-1.patch</userinput></screen>
+ 
+    <!-- Note that freedreno, vc4, and virgl all need special support from

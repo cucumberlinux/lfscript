@@ -1,0 +1,92 @@
+#!/bin/bash
+# Builds a redistributable archive containing LFScript.
+# Usage: "sudo bash distrib $(whoami)"
+set -e
+
+main() {
+    local REVISION="$(date +'%Y%m%d')"
+    local LFSCRIPT="lfscript4-revision${REVISION}"
+
+    if [ "$(whoami)" != "root" ]; then
+        echo "Please run this script as root."
+        exit 1
+    fi
+
+    # Prepare
+    local ARCHS="i386 arm x86_64"
+    rm -rf tmp ${LFSCRIPT}.tar.*
+    mkdir -p tmp/${LFSCRIPT}/make/vm
+
+    # Copy files that make up lfscript
+    cp    ../version-check.sh tmp/${LFSCRIPT}
+    cp    ../lfscript         tmp/${LFSCRIPT}
+
+    cp -R ../lfc          tmp/${LFSCRIPT}
+    cp -R ../fsos         tmp/${LFSCRIPT}
+    cp -R ../factory      tmp/${LFSCRIPT}
+    cp -R ../make/scripts tmp/${LFSCRIPT}
+    cp -R ../make/sources tmp/${LFSCRIPT}
+
+    cp -R ../make/scripts   tmp/${LFSCRIPT}/make
+    cp -R ../make/sources   tmp/${LFSCRIPT}/make
+    cp -R ../make/distrib   tmp/${LFSCRIPT}/make
+
+    for arch in ${ARCHS}; do
+      cp -R ../make/vm/vm-${arch} tmp/${LFSCRIPT}/make/vm
+    done
+
+    rm -rf tmp/${LFSCRIPT}/factory/{books,patched-xml,NEW_SCRIPTS}
+
+    pushd tmp
+    pushd ${LFSCRIPT}
+
+    # Rebuild LFClass
+    pushd lfc
+    bash build.sh purge # Purge to test download sites are still avialable
+    bash build.sh bin
+    rm -rf build/lfclass-* # Remove embedded LFC, leave the VM
+    bash build.sh pure
+    bash build.sh jar
+
+    # Add prebuilt binaries for other platforms
+    for arch in ${ARCHS}; do
+      if [ ! -r build/vm-${arch} ]; then
+        cp -v ../make/vm/vm-${arch} build
+      else
+        rm -vf ../make/vm/vm-${arch}
+        cp -v build/vm-${arch} ../make/vm
+      fi
+    done
+    popd # lfscript
+
+    # Rebuild scripts using ScriptFactory
+    pushd factory
+    rm -rf NEW_SCRIPTS patched-xml
+    bash factory lfs default header
+    bash factory blfs default header
+    mv -v NEW_SCRIPTS/* ../scripts
+    rm -rf NEW_SCRIPTS books
+    popd # factory
+
+    # Set proper permissions and archive
+    popd # tmp
+    find . -type d -exec chmod 755 {} \;
+    find . -type f -exec chmod 644 {} \;
+    chmod 755 ${LFSCRIPT}/version-check.sh
+    chmod 755 ${LFSCRIPT}/lfscript
+    chmod 755 ${LFSCRIPT}/lfc/build/vm-*
+    chmod 755 ${LFSCRIPT}/make/vm/vm-*
+    chmod 755 ${LFSCRIPT}/make/distrib
+    chmod 755 ${LFSCRIPT}/fsos/tools/merge_cds
+    chown -R root:root ${LFSCRIPT}
+    XZ_OPT=-e9 tar cJf ../${LFSCRIPT}.tar.xz ${LFSCRIPT}
+    popd # make
+    rm -rf tmp
+
+    if [ "${1}" != "" ]; then
+        chown ${1}:${1} ${LFSCRIPT}.tar.*
+    fi
+}
+
+main $@
+

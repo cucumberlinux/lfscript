@@ -1,0 +1,39 @@
+diff -rupN old/BOOK/xsoft/graphweb/chromium.xml new/BOOK/xsoft/graphweb/chromium.xml
+--- old/BOOK/xsoft/graphweb/chromium.xml	2017-04-16 17:40:02.000000000 +0200
++++ new/BOOK/xsoft/graphweb/chromium.xml	2017-04-19 20:41:15.208634302 +0200
+@@ -231,10 +231,7 @@ python third_party/libaddressinput/chrom
+       </para>
+     </note>
+ 
+-<screen><userinput>GN_CONFIG=('google_api_key="AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ"'
+-'google_default_client_id="595013732528-llk8trb03f0ldpqq6nprjp1s79596646.apps.googleusercontent.com"'
+-'google_default_client_secret="5ntt6GbbkjnTVXx-MSxbmx5e"'
+-'clang_use_chrome_plugins=false'
++<screen><userinput>GN_CONFIG=('clang_use_chrome_plugins=false'
+ 'enable_hangout_services_extension=true'
+ 'enable_nacl=false'
+ 'enable_nacl_nonsfi=false'
+@@ -302,12 +299,12 @@ install -vDm644 out/Release/chrome.1 \
+ <screen role="root"><userinput>for size in 16 32; do
+     install -vDm644 \
+         "chrome/app/theme/default_100_percent/chromium/product_logo_$size.png" \
+-        "/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png"
++        /usr/share/icons/hicolor/${size}x${size}/apps/chromium.png
+ done &amp;&amp;
+ 
+ for size in 22 24 48 64 128 256; do
+     install -vDm644 "chrome/app/theme/chromium/product_logo_$size.png" \
+-        "/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png"
++        /usr/share/icons/hicolor/${size}x${size}/apps/chromium.png
+ done &amp;&amp;
+ 
+ cat &gt; /usr/share/applications/chromium.desktop &lt;&lt; "EOF"
+@@ -333,7 +330,7 @@ cd temp
+ case $(uname -m) in
+     x86_64) ar -x ../../google-chrome-stable_&chromium-version;-1_amd64.deb
+     ;;
+-    x86) ar -x ../../google-chrome-stable_48.0.2564.116-1_i386.deb
++    i?86) ar -x ../../google-chrome-stable_48.0.2564.116-1_i386.deb
+     ;;
+ esac</userinput></screen>
+ 

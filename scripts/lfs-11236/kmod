@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-24.tar.xz"
+MD5SUMLIST="08297dfb6f2b3f625f928ca3278528af"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+./configure --prefix=/usr          \
+            --bindir=/bin          \
+            --sysconfdir=/etc      \
+            --with-rootlibdir=/lib \
+            --with-xz              \
+            --with-zlib
+
+make
+
+make DESTDIR=${FAKEROOT} install
+
+for target in depmod insmod lsmod modinfo modprobe rmmod; do
+  ln -sfv ../bin/kmod ${FAKEROOT}/sbin/$target
+done
+
+ln -sfv kmod ${FAKEROOT}/bin/lsmod
+
+#################
+} # END OF FILE #
+#################
+

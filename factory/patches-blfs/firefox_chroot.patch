@@ -1,0 +1,21 @@
+diff -rupN old/BOOK/xsoft/graphweb/firefox.xml new/BOOK/xsoft/graphweb/firefox.xml
+--- old/BOOK/xsoft/graphweb/firefox.xml	2017-03-09 04:30:17.000000000 +0100
++++ new/BOOK/xsoft/graphweb/firefox.xml	2017-03-16 19:59:08.245254276 +0100
+@@ -300,7 +300,7 @@ EOF</userinput></screen>
+       <envar>SHELL=/bin/sh</envar>.
+     </para></note>
+ 
+-<screen><userinput>make -f client.mk</userinput></screen>
++<screen><userinput>SHELL=/bin/sh make -f client.mk</userinput></screen>
+ 
+     <para>
+       This package does not come with a test suite.
+@@ -310,7 +310,7 @@ EOF</userinput></screen>
+       Now, as the <systemitem class="username">root</systemitem> user:
+     </para>
+ 
+-<screen role="root"><userinput>make -f client.mk install INSTALL_SDK= &amp;&amp;
++<screen role="root"><userinput>SHELL=/bin/sh make -f client.mk install INSTALL_SDK= &amp;&amp;
+ chown -R 0:0 /usr/lib/firefox-&firefox-version;   &amp;&amp;
+ 
+ mkdir -pv    /usr/lib/mozilla/plugins  &amp;&amp;

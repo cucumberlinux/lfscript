@@ -1,0 +1,12 @@
+diff -rupN old/BOOK/general/prog/cargo.xml new/BOOK/general/prog/cargo.xml
+--- old/BOOK/general/prog/cargo.xml	2017-04-14 22:42:14.000000000 +0200
++++ new/BOOK/general/prog/cargo.xml	2017-04-23 16:56:32.216574549 +0200
+@@ -173,7 +173,7 @@ popd
+ case $(uname -m) in
+     x86_64) tar -xf ../cargo-&CARGOPREV;-x86_64-unknown-linux-gnu.tar.gz
+     ;;
+-    i686) tar -xf ../cargo-&CARGOPREV;-i686-unknown-linux-gnu.tar.gz
++    i?86) tar -xf ../cargo-&CARGOPREV;-i686-unknown-linux-gnu.tar.gz
+     ;;
+ esac                                            &amp;&amp;
+ 

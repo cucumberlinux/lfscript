@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-4.10.0.tar.xz"
+MD5SUMLIST="b94a2b0edefaeac124dc8f5d006931b9"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+sed -i /ARPD/d Makefile
+sed -i 's/arpd.8//' man/man8/Makefile
+rm -v doc/arpd.sgml
+
+sed -i 's/m_ipt.o//' tc/Makefile
+
+make
+
+make DESTDIR=${FAKEROOT} DOCDIR=/usr/share/doc/iproute2-4.10.0 install
+
+#################
+} # END OF FILE #
+#################
+

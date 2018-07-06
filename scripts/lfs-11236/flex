@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz"
+MD5SUMLIST="2882e3179748cc9f9c23ec593d6adc8d"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+
+HELP2MAN=/tools/bin/true \
+./configure --prefix=/usr --docdir=/usr/share/doc/flex-2.6.4
+
+make
+
+make DESTDIR=${FAKEROOT} install
+
+ln -sv flex ${FAKEROOT}/usr/bin/lex
+
+#################
+} # END OF FILE #
+#################
+

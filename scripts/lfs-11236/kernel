@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.10.13.tar.xz"
+MD5SUMLIST="c3ea815abc2784bed9414ea91a691fb4"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+#make mrproper
+
+make
+
+make INSTALL_MOD_PATH=${FAKEROOT} modules_install
+
+cp -v arch/x86/boot/bzImage ${FAKEROOT}/boot/vmlinuz-4.10.13-lfs-SVN-20170428
+
+cp -v System.map ${FAKEROOT}/boot/System.map-4.10.13
+
+cp -v .config ${FAKEROOT}/boot/config-4.10.13
+
+install -d ${FAKEROOT}/usr/share/doc/linux-4.10.13
+cp -r Documentation/* ${FAKEROOT}/usr/share/doc/linux-4.10.13
+
+install -v -m755 -d ${FAKEROOT}/etc/modprobe.d
+cat > ${FAKEROOT}/etc/modprobe.d/usb.conf << "EOF"
+# Begin /etc/modprobe.d/usb.conf
+
+install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+
+# End /etc/modprobe.d/usb.conf
+EOF
+
+#################
+} # END OF FILE #
+#################
+

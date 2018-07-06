@@ -1,0 +1,11 @@
+diff -rupN old/BOOK/general/genlib/js38.xml new/BOOK/general/genlib/js38.xml
+--- old/BOOK/general/genlib/js38.xml	2017-04-04 06:38:10.000000000 +0200
++++ new/BOOK/general/genlib/js38.xml	2017-04-09 20:49:31.867651987 +0200
+@@ -126,6 +126,7 @@
+ <screen><userinput>cd js/src &amp;&amp;
+ autoconf2.13 &amp;&amp;
+ 
++SHELL=/bin/sh                   \
+ ./configure --prefix=/usr       \
+             --with-intl-api     \
+             --with-system-zlib  \

@@ -1,0 +1,61 @@
+diff -rupN old/BOOK/multimedia/libdriv/flashplayer.xml new/BOOK/multimedia/libdriv/flashplayer.xml
+--- old/BOOK/multimedia/libdriv/flashplayer.xml	2017-03-19 19:55:30.000000000 +0100
++++ new/BOOK/multimedia/libdriv/flashplayer.xml	2017-03-20 19:43:30.419507343 +0100
+@@ -167,12 +167,12 @@
+     <para>Install the <application>Flash Player</application> NPAPI plugin by
+     running the following commands:</para>
+ 
+-<screen><userinput>mkdir flashplayer &amp;&amp;
+-cd flashplayer    &amp;&amp;
++<screen><userinput>mkdir flashplayer_npapi &amp;&amp;
++pushd flashplayer_npapi    &amp;&amp;
+ case $(uname -m) in
+-    x86_64) tar -xf ../flash_player_npapi_linux.x86_64.tar.gz
++    x86_64) tar -xf ../../flash_player_npapi_linux.x86_64.tar.gz
+     ;;
+-    x86) tar -xf ../flash_player_npapi_linux.i386.tar.gz
++    i?86) tar -xf ../../flash_player_npapi_linux.i386.tar.gz
+     ;;
+ esac</userinput></screen>
+ 
+@@ -185,12 +185,13 @@ esac</userinput></screen>
+     <para>Install the <application>Flash Player</application> PPAPI plugin by
+     running the following commands:</para>
+ 
+-<screen><userinput>mkdir flashplayer &amp;&amp;
+-cd flashplayer    &amp;&amp;
+-case $(uname -m in
+-    x86_64) tar -xf ../flash_player_ppapi_linux.x86_64.tar.gz
++<screen><userinput>popd</userinput></screen>
++<screen><userinput>mkdir flashplayer_ppapi &amp;&amp;
++pushd flashplayer_ppapi    &amp;&amp;
++case $(uname -m) in
++    x86_64) tar -xf ../../flash_player_ppapi_linux.x86_64.tar.gz
+     ;;
+-    x86) tar -xf ../flash_player_ppapi_linux.i386.tar.gz
++    i?86) tar -xf ../../flash_player_ppapi_linux.i386.tar.gz
+     ;;
+ esac</userinput></screen>
+ 
+@@ -207,16 +208,17 @@ esac</userinput></screen>
+     line if the PPAPI plugin is found at runtime. Install <application>Chromium
+     Launcher</application> with the following commands:</para>
+ 
+-<screen><userinput>tar -xf chromium-launcher-3.tar.gz &amp;&amp;
+-cd chromium-launcher-3             &amp;&amp;
++<screen><userinput>popd</userinput></screen>
++<screen><userinput>tar -xf ../v3.tar.gz &amp;&amp;
++pushd chromium-launcher-3             &amp;&amp;
+ make PREFIX=/usr</userinput></screen>
+ 
+     <para>Now, as the <systemitem class="username">root</systemitem>
+     user:</para>
+ 
+-<screen role="root"><userinput>mv -v /usr/bin/chromium /usr/bin/chromium-orig &amp;&amp;
+-make PREFIX=/usr install-strip</userinput></screen>
++<screen role="root"><userinput>make PREFIX=/usr install-strip</userinput></screen>
+ 
++<screen><userinput>popd</userinput></screen>
+   </sect2>
+ 
+   <sect2 role="content">

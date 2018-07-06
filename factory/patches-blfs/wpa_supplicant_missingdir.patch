@@ -1,0 +1,12 @@
+diff -rupN old/BOOK/networking/netprogs/wpa_supplicant.xml new/BOOK/networking/netprogs/wpa_supplicant.xml
+--- old/BOOK/networking/netprogs/wpa_supplicant.xml	2017-02-20 21:59:39.000000000 +0100
++++ new/BOOK/networking/netprogs/wpa_supplicant.xml	2017-02-26 23:03:03.824998313 +0100
+@@ -230,6 +230,8 @@ install -v -m644 doc/docbook/wpa_{cli,pa
+       <systemitem class="username">root</systemitem> user:
+     </para>
+ 
++<screen role="root"><userinput>mkdir -p /etc/dbus-1/system.d</userinput></screen>
++
+ <screen role="root"><userinput>install -v -m644 dbus/fi.{epitest.hostap.WPASupplicant,w1.wpa_supplicant1}.service \
+                  /usr/share/dbus-1/system-services/ &amp;&amp;
+ install -v -m644 dbus/dbus-wpa_supplicant.conf \

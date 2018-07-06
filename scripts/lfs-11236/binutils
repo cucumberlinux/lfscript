@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="https://ftp.gnu.org/gnu/binutils/binutils-2.30.tar.xz"
+MD5SUMLIST="ffc476dd46c96f932875d1b2e27e929f"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+mkdir -v build
+cd       build
+
+../configure --prefix=/usr       \
+             --enable-gold       \
+             --enable-ld=default \
+             --enable-plugins    \
+             --enable-shared     \
+             --disable-werror    \
+             --with-system-zlib
+
+make tooldir=/usr
+
+make DESTDIR=${FAKEROOT} tooldir=/usr install
+
+#####################################################################
+}; preparation_pass1() { # CONSTRUCTING A TEMPORARY SYSTEM (PASS 1) #
+#####################################################################
+
+mkdir -v build
+cd       build
+
+../configure --prefix=/tools            \
+             --with-sysroot=$LFS        \
+             --with-lib-path=/tools/lib \
+             --target=$LFS_TGT          \
+             --disable-nls              \
+             --disable-werror
+
+make
+
+case $(uname -m) in
+  x86_64) mkdir -v /tools/lib && ln -sv lib /tools/lib64 ;;
+esac
+
+make install
+
+#########################################################################
+}; preparation_pass2() { # CONSTRUCTING A THE TEMPORARY SYSTEM (PASS 2) #
+#########################################################################
+
+mkdir -v build
+cd       build
+
+CC=$LFS_TGT-gcc                \
+AR=$LFS_TGT-ar                 \
+RANLIB=$LFS_TGT-ranlib         \
+../configure                   \
+    --prefix=/tools            \
+    --disable-nls              \
+    --disable-werror           \
+    --with-lib-path=/tools/lib \
+    --with-sysroot
+
+make
+
+make install
+
+make -C ld clean
+make -C ld LIB_PATH=/usr/lib:/lib
+cp -v ld/ld-new /tools/bin
+
+#########################################################################
+}; preparation() { # CONSTRUCTING A TEMPORARY SYSTEM (SCRIPT DELEGATOR) #
+#########################################################################
+
+if [ "${BINUTILS_PASS1}" != "completed" ]; then
+    preparation_pass1
+    BINUTILS_PASS1="completed"
+else
+    preparation_pass2
+fi
+
+#################
+} # END OF FILE #
+#################
+

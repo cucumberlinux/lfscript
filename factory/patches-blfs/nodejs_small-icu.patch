@@ -1,0 +1,24 @@
+diff -rupN old/BOOK/general/genlib/nodejs.xml new/BOOK/general/genlib/nodejs.xml
+--- old/BOOK/general/genlib/nodejs.xml	2017-04-23 09:06:22.000000000 +0200
++++ new/BOOK/general/genlib/nodejs.xml	2017-04-30 19:29:48.537944422 +0200
+@@ -127,7 +127,7 @@
+             --shared-cares         \
+             --shared-openssl       \
+             --shared-zlib          \
+-            --with-intl=icu-small  &amp;&amp;
++            --with-intl=small-icu  &amp;&amp;
+ make</userinput></screen>
+ 
+     <para>This package does not come with a test suite.</para>
+@@ -143,9 +143,9 @@ ln -sf node /usr/share/doc/node-&nodejs-
+   <sect2 role="commands">
+     <title>Command Explanations</title>
+ 
+-    <para><parameter>--with-intl=icu-small</parameter>: build a local, but
++    <para><parameter>--with-intl=small-icu</parameter>: build a local, but
+     small copy of <application>icu</application>. Other values are
+-    <option>icu-full</option> (to build a full <application>icu</application>
++    <option>full-icu</option> (to build a full <application>icu</application>
+     library) and <option>system-icu</option> (to use the system
+     <application>icu</application>).</para>
+ 

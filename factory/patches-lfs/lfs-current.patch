@@ -1,0 +1,234 @@
+diff -rupN old/BOOK/chapter05/stripping.xml new/BOOK/chapter05/stripping.xml
+--- old/BOOK/chapter05/stripping.xml	2016-06-01 04:52:10.000000000 +0200
++++ new/BOOK/chapter05/stripping.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -16,7 +16,9 @@
+   debugging symbols. Remove those symbols with:</para>
+ 
+ <screen><userinput>strip --strip-debug /tools/lib/*
+-/usr/bin/strip --strip-unneeded /tools/{,s}bin/*</userinput></screen>
++# (*) '/usr/bin/strip' might not work, so compromise and use 'strip' from the toolchain
++#/usr/bin/strip --strip-unneeded /tools/{,s}bin/*
++strip --strip-unneeded /tools/{,s}bin/*</userinput></screen>
+ 
+   <para>These commands will skip a number of files, reporting that it does not
+   recognize their file format. Most of these are scripts instead of binaries.
+diff -rupN old/BOOK/chapter06/bash.xml new/BOOK/chapter06/bash.xml
+--- old/BOOK/chapter06/bash.xml	2017-02-08 03:12:23.000000000 +0100
++++ new/BOOK/chapter06/bash.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -88,6 +88,9 @@
+ <screen><userinput remap="install">make install
+ mv -vf /usr/bin/bash /bin</userinput></screen>
+ 
++<screen><userinput remap="install"># (*) This will add the '/bin/sh' symlink to the package archive.
++ln -s bash /bin/sh</userinput></screen>
++
+     <para>Run the newly compiled <command>bash</command> program (replacing the one that is
+     currently being executed):</para>
+ 
+diff -rupN old/BOOK/chapter06/e2fsprogs.xml new/BOOK/chapter06/e2fsprogs.xml
+--- old/BOOK/chapter06/e2fsprogs.xml	2016-09-10 22:56:51.000000000 +0200
++++ new/BOOK/chapter06/e2fsprogs.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -153,14 +153,16 @@ make LD_LIBRARY_PATH=/tools/lib check</u
+     commands.</para>
+ 
+ <screen><userinput remap="install">gunzip -v /usr/share/info/libext2fs.info.gz
+-install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info</userinput></screen>
++# (*) 'install-info' will automatically be done in post-installation
++#install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info</userinput></screen>
+ 
+     <para>If desired, create and install some additional documentation by
+     issuing the following commands:</para>
+ 
+ <screen><userinput remap="install">makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
+ install -v -m644 doc/com_err.info /usr/share/info
+-install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info</userinput></screen>
++# (*) 'install-info' will automatically be done in post-installation
++#install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info</userinput></screen>
+   </sect2>
+ 
+   <sect2 id="contents-e2fsprogs" role="content">
+diff -rupN old/BOOK/chapter06/glibc.xml new/BOOK/chapter06/glibc.xml
+--- old/BOOK/chapter06/glibc.xml	2017-02-05 20:35:28.000000000 +0100
++++ new/BOOK/chapter06/glibc.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -61,7 +61,7 @@
+     compatibility symlink required for the dynamic loader to function
+     correctly:</para>
+ 
+-<screen><userinput remap="pre">case $(uname -m) in
++<screen><userinput remap="install">case $(uname -m) in
+     x86) ln -s ld-linux.so.2 /lib/ld-lsb.so.3
+     ;;
+     x86_64) ln -s ../lib/ld-linux-x86-64.so.2 /lib64
+@@ -212,9 +212,12 @@ localedef -i zh_CN -f GB18030 zh_CN.GB18
+     <filename>glibc-&glibc-version;/localedata/SUPPORTED</filename> file
+     in the unlikely case you need them.</para>
+ 
++<!--
++    (*) Configuration contains commands that should be in the 'installation' section
+   </sect2>
+ 
+   <sect2 id="conf-glibc" role="configuration">
++-->
+     <title>Configuring Glibc</title>
+ 
+     <indexterm zone="conf-glibc">
+@@ -235,7 +238,8 @@ localedef -i zh_CN -f GB18030 zh_CN.GB18
+     <para>Create a new file <filename>/etc/nsswitch.conf</filename> by running the
+     following:</para>
+ 
+-<screen><userinput>cat &gt; /etc/nsswitch.conf &lt;&lt; "EOF"
++<!-- (*) Because commands are now in 'installation', they require remapping -->
++<screen><userinput remap="install">cat &gt; /etc/nsswitch.conf &lt;&lt; "EOF"
+ <literal># Begin /etc/nsswitch.conf
+ 
+ passwd: files
+@@ -259,7 +263,8 @@ EOF</userinput></screen>
+     <title>Adding time zone data</title>
+ 
+     <para>Install and set up the time zone data with the following:</para>
+-<screen><userinput>tar -xf ../../tzdata&tzdata-version;.tar.gz
++<!-- (*) Because commands are now in 'installation', they require remapping -->
++<screen><userinput remap="install">tar -xf ../../tzdata&tzdata-version;.tar.gz
+ 
+ ZONEINFO=/usr/share/zoneinfo
+ mkdir -pv $ZONEINFO/{posix,right}
+@@ -314,7 +319,9 @@ unset ZONEINFO</userinput></screen>
+       </varlistentry>
+     </variablelist>
+ 
+-
++  </sect2>
++  <!-- (*) From here on, commands actually are configuration -->
++  <sect2 id="conf-glibc" role="configuration">
+     <para>One way to determine the local time zone is to run the following
+     script:</para>
+ 
+diff -rupN old/BOOK/chapter06/groff.xml new/BOOK/chapter06/groff.xml
+--- old/BOOK/chapter06/groff.xml	2016-06-01 04:52:10.000000000 +0200
++++ new/BOOK/chapter06/groff.xml	2017-04-09 20:51:53.715719263 +0200
+@@ -55,7 +55,7 @@
+ 
+     <para>Compile the package:</para>
+ 
+-<screen><userinput remap="make">make</userinput></screen>
++<screen><userinput remap="make">make -j1</userinput></screen>
+ 
+     <para>This package does not come with a test suite.</para>
+ 
+diff -rupN old/BOOK/chapter06/revisedchroot.xml new/BOOK/chapter06/revisedchroot.xml
+--- old/BOOK/chapter06/revisedchroot.xml	2016-06-01 04:52:10.000000000 +0200
++++ new/BOOK/chapter06/revisedchroot.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -12,7 +12,10 @@
+ 
+   <para>Finally, clean up some extra files left around from running tests:</para>
+ 
+-<screen><userinput>rm -rf /tmp/*</userinput></screen>
++<screen><userinput># (*) When this command is executed, the build manager is running on the host
++#        system, so adjust the command to clean $LFS/tmp...
++#rm -rf /tmp/*
++rm -rf ${LFS}/tmp/*</userinput></screen>
+ 
+   <para>From now on, when reentering the chroot environment after
+   exiting, use the following modified chroot command:</para>
+@@ -27,6 +30,9 @@
+   longer needed you can delete the <filename class="directory">/tools</filename>
+   directory if so desired.</para>
+ 
++<screen><userinput># (*) Remove tools
++rm -rf /tools</userinput></screen>
++
+   <note>
+     <para>Removing <filename class="directory">/tools</filename> will also
+     remove the temporary copies of Tcl, Expect, and DejaGNU which were used
+@@ -46,6 +52,8 @@
+   libraries are from binutils, bzip2, e2fsprogs, flex, libtool, and zlib.  If desired,
+   remove them now:</para>
+ 
++<!--
++   (*) These files have been packaged; No need to remove them here
+ <screen><userinput>rm -f /usr/lib/lib{bfd,opcodes}.a
+ rm -f /usr/lib/libbz2.a
+ rm -f /usr/lib/lib{com_err,e2p,ext2fs,ss}.a
+@@ -53,5 +61,6 @@ rm -f /usr/lib/libltdl.a
+ rm -f /usr/lib/libfl.a
+ rm -f /usr/lib/libfl_pic.a
+ rm -f /usr/lib/libz.a</userinput></screen>
++-->
+ 
+ </sect1>
+diff -rupN old/BOOK/chapter06/texinfo.xml new/BOOK/chapter06/texinfo.xml
+--- old/BOOK/chapter06/texinfo.xml	2016-06-01 04:52:10.000000000 +0200
++++ new/BOOK/chapter06/texinfo.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -92,7 +92,16 @@
+       </varlistentry>
+ 
+     </variablelist>
++  </sect2>
+ 
++  <!--
++    (*) By starting a 'configuration' section here, the rebuilding of
++        '/usr/share/info/dir' will be done in post-installation, and will
++        therefore always automatically run after a system installation.
++  -->
++
++  <sect2 role="configuration">
++    <title>Configuring Texinfo</title>
+     <para>The Info documentation system uses a plain text file to hold its list of
+     menu entries. The file is located at <filename>/usr/share/info/dir</filename>.
+     Unfortunately, due to occasional problems in the Makefiles of various packages,
+@@ -101,7 +110,9 @@
+     recreated, the following optional commands will accomplish the task:</para>
+ 
+ <screen role="nodump"><userinput>pushd /usr/share/info
+-rm -v dir
++# (*) Without '-f', 'rm' would fail if 'dir' does not exist
++#rm -v dir
++rm -vf dir
+ for f in *
+   do install-info $f dir 2&gt;/dev/null
+ done
+diff -rupN old/BOOK/chapter06/util-linux.xml new/BOOK/chapter06/util-linux.xml
+--- old/BOOK/chapter06/util-linux.xml	2016-08-12 04:02:09.000000000 +0200
++++ new/BOOK/chapter06/util-linux.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -48,7 +48,11 @@
+     location for the <filename>adjtime</filename> file.  First create a directory
+     to enable storage for the <command>hwclock</command> program:</para>
+ 
+-<screen><userinput remap="pre">mkdir -pv /var/lib/hwclock</userinput></screen>
++<!--
++    (*) By remapping the 'mkdir' command to 'install', the directory will be
++        created in DESTDIR.
++-->
++<screen><userinput remap="install">mkdir -pv /var/lib/hwclock</userinput></screen>
+ 
+   </sect2>
+ 
+diff -rupN old/BOOK/chapter06/vim.xml new/BOOK/chapter06/vim.xml
+--- old/BOOK/chapter06/vim.xml	2017-02-13 04:35:42.000000000 +0100
++++ new/BOOK/chapter06/vim.xml	2017-04-09 20:51:36.331711246 +0200
+@@ -146,7 +146,11 @@ EOF</userinput></screen>
+     <para>Documentation for other available options can be obtained by
+     running the following command:</para>
+ 
++<!--
++    (*) This command opens an interactive application. So, we must disable it
++        for the installation to be able to finish without user interaction.
+ <screen role="nodump"><userinput>vim -c ':options'</userinput></screen>
++-->
+ 
+     <note>
+       <para>By default, Vim only installs spell files for the English language.
+diff -rupN old/BOOK/packages.ent new/BOOK/packages.ent
+--- old/BOOK/packages.ent	2017-04-03 20:45:56.000000000 +0200
++++ new/BOOK/packages.ent	2017-04-09 20:51:36.331711246 +0200
+@@ -222,6 +222,10 @@
+ <!ENTITY libstdcpp-ch5-du "898 MB">
+ <!ENTITY libstdcpp-ch5-sbu "0.4 SBU">
+ 
+++<!-- (*) Libstdc++ is part of the GCC sources -->
+++<!ENTITY libstdc++-url "&gcc-url;">
+++<!ENTITY libstdc++-md5 "&gcc-md5;">
++
+ <!ENTITY gdbm-version "1.13">
+ <!ENTITY gdbm-size "872 KB">
+ <!ENTITY gdbm-url "&gnu;gdbm/gdbm-&gdbm-version;.tar.gz">

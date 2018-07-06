@@ -1,0 +1,15 @@
+diff -rupN old/BOOK/pst/sgml/sgml-common.xml new/BOOK/pst/sgml/sgml-common.xml
+--- old/BOOK/pst/sgml/sgml-common.xml	2017-02-26 22:47:00.344154519 +0100
++++ new/BOOK/pst/sgml/sgml-common.xml	2017-02-26 22:47:15.760180143 +0100
+@@ -98,9 +98,9 @@ make</userinput></screen>
+ 
+     <para>Now, as the <systemitem class="username">root</systemitem> user:</para>
+ 
+-<screen role="root"><userinput>make docdir=/usr/share/doc install &amp;&amp;
++<screen role="root"><userinput>make docdir=/usr/share/doc install</userinput></screen>
+ 
+-install-catalog --add /etc/sgml/sgml-ent.cat \
++<screen role="root"><userinput>install-catalog --add /etc/sgml/sgml-ent.cat \
+     /usr/share/sgml/sgml-iso-entities-8879.1986/catalog &amp;&amp;
+ 
+ install-catalog --add /etc/sgml/sgml-docbook.cat \

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# The instructions in this file are extracted from
+# 'Linux From Scratch 8.1' (SVN-20170428 / r11236) but are modified for use
+# with LFScript 4 which installs the software to a fake root directory.
+#
+# Linux From Scratch is released under the MIT license.
+# Copyright (C) 1999-2017, Gerard Beekmans
+
+WGETLIST="http://ftp.gnu.org/gnu/gettext/gettext-0.19.8.1.tar.xz"
+MD5SUMLIST="df3f5690eaa30fd228537b00cb7b7590"
+
+###############################################
+installation() { # INSTALLING SYSTEM SOFTWARE #
+###############################################
+
+sed -i '/^TESTS =/d' gettext-runtime/tests/Makefile.in
+sed -i 's/test-lock..EXEEXT.//' gettext-tools/gnulib-tests/Makefile.in
+
+./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/gettext-0.19.8.1
+
+make
+
+make DESTDIR=${FAKEROOT} install
+chmod -v 0755 ${FAKEROOT}/usr/lib/preloadable_libintl.so
+
+######################################################
+}; preparation() { # CONSTRUCTING A TEMPORARY SYSTEM #
+######################################################
+
+cd gettext-tools
+EMACS="no" ./configure --prefix=/tools --disable-shared
+
+make -C gnulib-lib
+make -C intl pluralx.c
+make -C src msgfmt
+make -C src msgmerge
+make -C src xgettext
+
+cp -v src/{msgfmt,msgmerge,xgettext} /tools/bin
+
+#################
+} # END OF FILE #
+#################
+

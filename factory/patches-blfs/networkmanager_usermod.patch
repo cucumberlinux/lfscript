@@ -1,0 +1,18 @@
+diff -rupN old/BOOK/networking/netutils/networkmanager.xml new/BOOK/networking/netutils/networkmanager.xml
+--- old/BOOK/networking/netutils/networkmanager.xml	2017-02-24 19:42:12.000000000 +0100
++++ new/BOOK/networking/netutils/networkmanager.xml	2017-02-26 23:35:40.892050380 +0100
+@@ -286,10 +286,11 @@ EOF</userinput></screen>
+         <systemitem class="username">root</systemitem> user:
+       </para>
+ 
+-<screen role="root"><userinput>groupadd -fg 86 netdev &amp;&amp;
+-/usr/sbin/usermod -a -G netdev <replaceable>&lt;username&gt;</replaceable>
++<screen role="root"><userinput>groupadd -fg 86 netdev</userinput></screen>
+ 
+-cat &gt; /usr/share/polkit-1/rules.d/org.freedesktop.NetworkManager.rules &lt;&lt; "EOF"
++<screen role="root"><userinput>/usr/sbin/usermod -a -G netdev <replaceable>&lt;username&gt;</replaceable></userinput></screen>
++
++<screen role="root"><userinput>cat &gt; /usr/share/polkit-1/rules.d/org.freedesktop.NetworkManager.rules &lt;&lt; "EOF"
+ <literal>polkit.addRule(function(action, subject) {
+     if (action.id.indexOf("org.freedesktop.NetworkManager.") == 0 &amp;&amp; subject.isInGroup("netdev")) {
+         return polkit.Result.YES;
