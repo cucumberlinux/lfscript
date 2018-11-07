@@ -401,6 +401,10 @@ resumeBaseBuild() {
     fi
   fi
 
+  # We are done with CuLFS Phase 1; exit gracefully here.
+  displayMsg "CuLFS Phase 1 is now complete."
+  exit 0
+
   # If we are at the point that the /tools directory is about to be deleted,
   # unmount that directory (if it was mounted by using -I <dir>).
   if [ "${NEXTFUNCTION}" == "${BUILDBEYOND}" ]; then
